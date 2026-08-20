@@ -1,0 +1,160 @@
+.products-page {
+  min-height: 100vh;
+  padding: 30px;
+  background: #f4f7fb;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.products-header h1 {
+  margin: 0;
+  color: #123b5d;
+}
+
+.products-header p {
+  color: #666;
+}
+
+.add-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #176b9d;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.product-tools {
+  display: flex;
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.product-tools input,
+.product-tools select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+}
+
+.product-tools input {
+  width: 300px;
+}
+
+.product-table {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.product-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table th,
+.product-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.product-table th {
+  color: #123b5d;
+}
+
+.good,
+.warning,
+.danger {
+  padding: 6px 10px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+.good {
+  background: #dff5e5;
+  color: #218838;
+}
+
+.warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.danger {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.edit,
+.delete {
+  border: none;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.edit {
+  background: #e3f2fd;
+  color: #176b9d;
+}
+
+.delete {
+  background: #fde2e2;
+  color: #c0392b;
+} 
+.form-box {
+  background: white;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px #0001;
+  max-width: 600px;
+}
+
+.form-box h2 {
+  color: #123b5d;
+  margin-top: 0;
+}
+
+.form-box input,
+.form-box select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background: #176b9d;
+  color: white;
+}
+
+.cancel-btn {
+  background: #ddd;
+  color: #333;
+}
