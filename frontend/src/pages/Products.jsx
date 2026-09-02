@@ -3,26 +3,119 @@ import "./Products.css";
 
 function Products() {
   const [showForm, setShowForm] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [productName, setProductName] = useState("");
-  const addProduct = () => {
-  if (productName.trim() === "") {
-    alert("Please enter product name");
-    return;
-  }
+  const [products, setProducts] = useState([
+    {
+      id: 1,
+      name: "Fresh Apples",
+      category: "Fruits",
+      quantity: "250 kg",
+      storage: "Cold Room A",
+      expiryDate: "25-08-2026",
+      status: "Good",
+    },
+    {
+      id: 2,
+      name: "Milk",
+      category: "Dairy",
+      quantity: "180 L",
+      storage: "Cold Room B",
+      expiryDate: "20-08-2026",
+      status: "Expiring",
+    },
+    {
+      id: 3,
+      name: "Frozen Chicken",
+      category: "Meat",
+      quantity: "320 kg",
+      storage: "Freezer A",
+      expiryDate: "15-12-2026",
+      status: "Good",
+    },
+  ]);
 
-  const newProduct = {
-    id: products.length + 1,
-    name: productName
+  const [editId, setEditId] = useState(null);
+  const [search, setSearch] = useState("");
+
+  const [productName, setProductName] = useState("");
+  const [category, setCategory] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [storage, setStorage] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+
+  // ADD / UPDATE PRODUCT
+  const addProduct = () => {
+    if (productName.trim() === "") {
+      alert("Please enter product name");
+      return;
+    }
+
+    if (editId !== null) {
+      const updatedProducts = products.map((product) =>
+        product.id === editId
+          ? {
+              ...product,
+              name: productName,
+              category: category,
+              quantity: quantity,
+              storage: storage,
+              expiryDate: expiryDate,
+            }
+          : product
+      );
+
+      setProducts(updatedProducts);
+      setEditId(null);
+    } else {
+      const newProduct = {
+        id: products.length + 1,
+        name: productName,
+        category: category,
+        quantity: quantity,
+        storage: storage,
+        expiryDate: expiryDate,
+        status: "New",
+      };
+
+      setProducts([...products, newProduct]);
+    }
+
+    setProductName("");
+    setCategory("");
+    setQuantity("");
+    setStorage("");
+    setExpiryDate("");
+    setShowForm(false);
   };
 
-  setProducts([...products, newProduct]);
-  setProductName("");
-  setShowForm(false);
-};
+  // DELETE PRODUCT
+  const deleteProduct = (id) => {
+    const updatedProducts = products.filter(
+      (product) => product.id !== id
+    );
+
+    setProducts(updatedProducts);
+  };
+
+  // EDIT PRODUCT
+  const editProduct = (product) => {
+    setEditId(product.id);
+    setProductName(product.name);
+    setCategory(product.category);
+    setQuantity(product.quantity);
+    setStorage(product.storage);
+    setExpiryDate(product.expiryDate);
+    setShowForm(true);
+  };
+
+  // SEARCH
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="products-page">
 
+      {/* Header */}
       <div className="products-header">
         <div>
           <h1>Product Management</h1>
@@ -31,42 +124,83 @@ function Products() {
 
         <button
           className="add-btn"
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            setEditId(null);
+            setProductName("");
+            setCategory("");
+            setQuantity("");
+            setStorage("");
+            setExpiryDate("");
+            setShowForm(true);
+          }}
         >
           + Add Product
         </button>
       </div>
 
+      {/* Add / Edit Product Form */}
       {showForm && (
         <div className="form-box">
-          <h2>Add New Product</h2>
+          <h2>
+            {editId !== null ? "Edit Product" : "Add New Product"}
+          </h2>
+
           <input
-  type="text"
-  placeholder="Product Name"
-  value={productName}
-  onChange={(e) => setProductName(e.target.value)}
-  />
-          <select>
-            <option>Select Category</option>
-            <option>Fruits</option>
-            <option>Vegetables</option>
-            <option>Dairy</option>
-            <option>Meat</option>
-            <option>Frozen Foods</option>
+            type="text"
+            placeholder="Product Name"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Select Category</option>
+            <option value="Fruits">Fruits</option>
+            <option value="Vegetables">Vegetables</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Meat">Meat</option>
+            <option value="Frozen Foods">Frozen Foods</option>
           </select>
-          <input type="number" placeholder="Quantity" />
 
-          <input type="text" placeholder="Storage Location" />
+          <input
+            type="text"
+            placeholder="Quantity"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+          />
 
-          <input type="date" />
+          <input
+            type="text"
+            placeholder="Storage Location"
+            value={storage}
+            onChange={(e) => setStorage(e.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="Expiry Date"
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+          />
 
           <div className="form-buttons">
-            <button className="save-btn" onClick={addProduct}>
-            Save Product
-              </button>
+            <button
+              className="save-btn"
+              onClick={addProduct}
+            >
+              {editId !== null
+                ? "Update Product"
+                : "Save Product"}
+            </button>
+
             <button
               className="cancel-btn"
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowForm(false);
+                setEditId(null);
+              }}
             >
               Cancel
             </button>
@@ -74,10 +208,13 @@ function Products() {
         </div>
       )}
 
+      {/* Search */}
       <div className="product-tools">
         <input
           type="text"
           placeholder="🔍 Search product..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
 
         <select>
@@ -90,8 +227,10 @@ function Products() {
         </select>
       </div>
 
+      {/* Product Table */}
       <div className="product-table">
         <table>
+
           <thead>
             <tr>
               <th>ID</th>
@@ -106,53 +245,53 @@ function Products() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>P001</td>
-              <td>Fresh Apples</td>
-              <td>Fruits</td>
-              <td>250 kg</td>
-              <td>Cold Room A</td>
-              <td>25-08-2026</td>
-              <td>
-                <span className="good">Good</span>
-              </td>
-              <td>
-                <button className="edit">Edit</button>
-                <button className="delete">Delete</button>
-              </td>
-            </tr>
 
-            <tr>
-              <td>P002</td>
-              <td>Milk</td>
-              <td>Dairy</td>
-              <td>180 L</td>
-              <td>Cold Room B</td>
-              <td>20-08-2026</td>
-              <td>
-                <span className="warning">Expiring</span>
-              </td>
-              <td>
-                <button className="edit">Edit</button>
-                <button className="delete">Delete</button>
-              </td>
-            </tr>
+            {filteredProducts.map((product) => (
+              <tr key={product.id}>
 
-            <tr>
-              <td>P003</td>
-              <td>Frozen Chicken</td>
-              <td>Meat</td>
-              <td>320 kg</td>
-              <td>Freezer A</td>
-              <td>15-12-2026</td>
-              <td>
-                <span className="good">Good</span>
-              </td>
-              <td>
-                <button className="edit">Edit</button>
-                <button className="delete">Delete</button>
-              </td>
-            </tr>
+                <td>P00{product.id}</td>
+
+                <td>{product.name}</td>
+
+                <td>{product.category}</td>
+
+                <td>{product.quantity}</td>
+
+                <td>{product.storage}</td>
+
+                <td>{product.expiryDate}</td>
+
+                <td>
+                  <span
+                    className={
+                      product.status === "Expiring"
+                        ? "warning"
+                        : "good"
+                    }
+                  >
+                    {product.status}
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    className="edit"
+                    onClick={() => editProduct(product)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete"
+                    onClick={() => deleteProduct(product.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+
+              </tr>
+            ))}
+
           </tbody>
         </table>
       </div>
