@@ -1,6 +1,6 @@
 import "./Login.css";
 
-function Login() {
+function Login({ onLogin }) {
   return (
     <div className="login-page">
       <div className="login-left">
@@ -20,12 +20,18 @@ function Login() {
         <p>Login to your FrostGuard account</p>
 
         <label>Email Address</label>
-        <input type="email" placeholder="Enter your email" />
+        <input
+          type="email"
+          placeholder="Enter your email"
+        />
 
         <label>Password</label>
-        <input type="password" placeholder="Enter your password" />
+        <input
+          type="password"
+          placeholder="Enter your password"
+        />
 
-        <button>Login</button>
+        <button onClick={onLogin}>Login</button>
       </div>
     </div>
   );

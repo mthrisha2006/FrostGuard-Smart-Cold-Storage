@@ -35,7 +35,7 @@ function Products() {
 
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
-
+  const [filterCategory, setFilterCategory] = useState("");
   const [productName, setProductName] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -107,10 +107,10 @@ function Products() {
     setShowForm(true);
   };
 
-  // SEARCH
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(search.toLowerCase())
-  );
+  product.name.toLowerCase().includes(search.toLowerCase()) &&
+  (filterCategory === "" || product.category === filterCategory)
+);
 
   return (
     <div className="products-page">
@@ -216,15 +216,17 @@ function Products() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
-        <select>
-          <option>All Categories</option>
-          <option>Fruits</option>
-          <option>Vegetables</option>
-          <option>Dairy</option>
-          <option>Meat</option>
-          <option>Frozen Foods</option>
-        </select>
+      <select
+  value={filterCategory}
+  onChange={(e) => setFilterCategory(e.target.value)}
+>
+  <option value="">All Categories</option>
+  <option value="Fruits">Fruits</option>
+  <option value="Vegetables">Vegetables</option>
+  <option value="Dairy">Dairy</option>
+  <option value="Meat">Meat</option>
+  <option value="Frozen Foods">Frozen Foods</option>
+</select>
       </div>
 
       {/* Product Table */}
