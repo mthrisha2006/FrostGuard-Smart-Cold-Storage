@@ -1,51 +1,60 @@
-.dashboard {
-  margin-left: 220px;
+.storage-page {
+    margin-left: 220px;
   padding: 30px;
   background: #f5f7fb;
   min-height: 100vh;
-  box-sizing: border-box;
 }
 
-.dashboard h1 {
+.storage-page h1 {
   margin-bottom: 8px;
   color: #1e293b;
 }
 
-.dashboard > p {
+.storage-page > p {
   color: #64748b;
   margin-bottom: 30px;
 }
 
-.dashboard-cards {
+.storage-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.card {
+.storage-card {
   background: white;
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.card h3 {
+.storage-card h3 {
   margin: 0;
   color: #64748b;
-  font-size: 16px;
 }
 
-.card h2 {
-  margin: 15px 0 8px;
+.storage-card h2 {
   font-size: 32px;
+  margin: 15px 0 8px;
   color: #1e293b;
 }
 
-.card p {
-  margin: 0;
+.storage-card p {
   color: #94a3b8;
+  margin-bottom: 12px;
 }
-.recent-products {
+
+.normal {
+  color: green;
+  font-weight: bold;
+}
+
+.warning {
+  color: orange;
+  font-weight: bold;
+}
+
+.storage-table {
   margin-top: 30px;
   background: white;
   padding: 25px;
@@ -53,41 +62,28 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.recent-products h2 {
-  margin-bottom: 20px;
+.storage-table h2 {
   color: #1e293b;
+  margin-bottom: 20px;
 }
 
-.recent-products table {
+.storage-table table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.recent-products th,
-.recent-products td {
+.storage-table th,
+.storage-table td {
   padding: 14px;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.recent-products th {
+.storage-table th {
   color: #64748b;
   font-size: 14px;
 }
 
-.recent-products td {
+.storage-table td {
   color: #334155;
-} 
-@media (max-width: 768px) {
-  .dashboard-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .recent-products {
-    overflow-x: auto;
-  }
-
-  .recent-products table {
-    min-width: 700px;
-  }
 }

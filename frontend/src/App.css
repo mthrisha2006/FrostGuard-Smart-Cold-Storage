@@ -1,34 +1,94 @@
 .navbar {
-  height: 70px;
+  width: 220px;
+  height: 100vh;
   background: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 25px 15px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
 .navbar h2 {
-  margin: 0;
   color: #2563eb;
+  margin: 0 0 30px;
+  text-align: center;
 }
 
 .navbar div {
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
 .navbar button {
   border: none;
   background: transparent;
-  padding: 10px 18px;
+  padding: 12px 15px;
   font-size: 15px;
   cursor: pointer;
   color: #475569;
   border-radius: 8px;
+  text-align: left;
 }
 
 .navbar button:hover {
   background: #eff6ff;
   color: #2563eb;
+}
+
+.navbar button:last-child {
+  margin-top: 20px;
+  color: #ef4444;
+}
+
+.navbar button:last-child:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+@media (max-width: 768px) {
+  .navbar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 15px;
+  }
+
+  .navbar h2 {
+    margin-bottom: 15px;
+  }
+
+  .navbar div {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navbar button {
+    text-align: center;
+    padding: 10px 12px;
+  }
+
+  .navbar button:last-child {
+    margin-top: 0;
+  }
+
+  .dashboard,
+  .products-page,
+  .temperature-page,
+  .alerts-page,
+  .storage-page,
+  .reports-page {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .dashboard-cards,
+  .temperature-cards,
+  .alert-cards,
+  .storage-cards,
+  .report-cards {
+    grid-template-columns: 1fr;
+  }
 }

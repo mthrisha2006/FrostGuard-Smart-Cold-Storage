@@ -1,51 +1,55 @@
-.dashboard {
-  margin-left: 220px;
+.temperature-page {
+    margin-left: 220px;
   padding: 30px;
   background: #f5f7fb;
   min-height: 100vh;
-  box-sizing: border-box;
 }
 
-.dashboard h1 {
+.temperature-page h1 {
   margin-bottom: 8px;
   color: #1e293b;
 }
 
-.dashboard > p {
+.temperature-page > p {
   color: #64748b;
   margin-bottom: 30px;
 }
 
-.dashboard-cards {
+.temperature-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.card {
+.temperature-card {
   background: white;
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.card h3 {
-  margin: 0;
+.temperature-card h3 {
   color: #64748b;
-  font-size: 16px;
+  margin: 0;
 }
 
-.card h2 {
-  margin: 15px 0 8px;
+.temperature-card h2 {
   font-size: 32px;
+  margin: 15px 0;
   color: #1e293b;
 }
 
-.card p {
-  margin: 0;
-  color: #94a3b8;
+.normal {
+  color: green;
+  font-weight: bold;
 }
-.recent-products {
+
+.warning {
+  color: orange;
+  font-weight: bold;
+}
+
+.temperature-table {
   margin-top: 30px;
   background: white;
   padding: 25px;
@@ -53,41 +57,28 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.recent-products h2 {
-  margin-bottom: 20px;
+.temperature-table h2 {
   color: #1e293b;
+  margin-bottom: 20px;
 }
 
-.recent-products table {
+.temperature-table table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.recent-products th,
-.recent-products td {
+.temperature-table th,
+.temperature-table td {
   padding: 14px;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.recent-products th {
+.temperature-table th {
   color: #64748b;
   font-size: 14px;
 }
 
-.recent-products td {
+.temperature-table td {
   color: #334155;
-} 
-@media (max-width: 768px) {
-  .dashboard-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .recent-products {
-    overflow-x: auto;
-  }
-
-  .recent-products table {
-    min-width: 700px;
-  }
 }
