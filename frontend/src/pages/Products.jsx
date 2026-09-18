@@ -1,38 +1,8 @@
 import { useState } from "react";
 import "./Products.css";
 
-function Products() {
+function Products({ products, setProducts }) {
   const [showForm, setShowForm] = useState(false);
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Fresh Apples",
-      category: "Fruits",
-      quantity: "250 kg",
-      storage: "Cold Room A",
-      expiryDate: "25-08-2026",
-      status: "Good",
-    },
-    {
-      id: 2,
-      name: "Milk",
-      category: "Dairy",
-      quantity: "180 L",
-      storage: "Cold Room B",
-      expiryDate: "20-08-2026",
-      status: "Expiring",
-    },
-    {
-      id: 3,
-      name: "Frozen Chicken",
-      category: "Meat",
-      quantity: "320 kg",
-      storage: "Freezer A",
-      expiryDate: "15-12-2026",
-      status: "Good",
-    },
-  ]);
-
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -41,8 +11,6 @@ function Products() {
   const [quantity, setQuantity] = useState("");
   const [storage, setStorage] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-
-  // ADD / UPDATE PRODUCT
   const addProduct = () => {
     if (productName.trim() === "") {
       alert("Please enter product name");
@@ -67,15 +35,14 @@ function Products() {
       setEditId(null);
     } else {
       const newProduct = {
-        id: products.length + 1,
-        name: productName,
-        category: category,
-        quantity: quantity,
-        storage: storage,
-        expiryDate: expiryDate,
-        status: "New",
-      };
-
+  id: Date.now(),
+  name: productName,
+  category: category,
+  quantity: quantity,
+  storage: storage,
+  expiryDate: expiryDate,
+  status: "New",
+};
       setProducts([...products, newProduct]);
     }
 

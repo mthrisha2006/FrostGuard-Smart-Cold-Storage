@@ -12,6 +12,36 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [page, setPage] = useState("dashboard");
 
+  const [products, setProducts] = useState([
+    {
+      id: 1,
+      name: "Fresh Apples",
+      category: "Fruits",
+      quantity: "250 kg",
+      storage: "Cold Room A",
+      expiryDate: "25-08-2026",
+      status: "Good",
+    },
+    {
+      id: 2,
+      name: "Milk",
+      category: "Dairy",
+      quantity: "180 L",
+      storage: "Cold Room B",
+      expiryDate: "20-08-2026",
+      status: "Expiring",
+    },
+    {
+      id: 3,
+      name: "Frozen Chicken",
+      category: "Meat",
+      quantity: "320 kg",
+      storage: "Freezer A",
+      expiryDate: "15-12-2026",
+      status: "Good",
+    },
+  ]);
+
   if (!isLoggedIn) {
     return <Login onLogin={() => setIsLoggedIn(true)} />;
   }
@@ -52,12 +82,21 @@ function App() {
         </div>
       </nav>
 
-      {page === "dashboard" && <Dashboard />}
-      {page === "products" && <Products />}
+      {page === "dashboard" && (
+        <Dashboard products={products} />
+      )}
+
+      {page === "products" && (
+        <Products
+          products={products}
+          setProducts={setProducts}
+        />
+      )}
+
       {page === "temperature" && <Temperature />}
       {page === "alerts" && <Alerts />}
       {page === "storage" && <Storage />}
-      {page === "reports" && <Reports />}
+      {page === "reports" && <Reports products={products} />}
     </div>
   );
 }
