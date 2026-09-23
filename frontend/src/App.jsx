@@ -83,16 +83,18 @@ function App() {
       </nav>
 
       {page === "dashboard" && (
-        <Dashboard products={products} />
+        <Dashboard
+  products={products}
+  setPage={setPage}
+/>
       )}
 
-      {page === "products" && (
-        <Products
-          products={products}
-          setProducts={setProducts}
-        />
-      )}
-
+     {page === "products" && (
+  <Products
+    products={products}
+    setProducts={setProducts}
+  />
+)}
       {page === "temperature" && <Temperature />}
       {page === "alerts" && <Alerts />}
       {page === "storage" && <Storage />}

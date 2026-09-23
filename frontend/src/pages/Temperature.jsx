@@ -26,36 +26,66 @@ function Temperature() {
     },
   ]);
 
+  // Update temperature
   const updateTemperature = (id, value) => {
     setTemperatures(
       temperatures.map((room) =>
         room.id === id
-          ? { ...room, current: Number(value) }
+          ? {
+              ...room,
+              current: Number(value),
+            }
           : room
       )
     );
   };
 
+  // Get temperature status
   const getStatus = (room) => {
-    if (room.current >= room.min && room.current <= room.max) {
+    if (
+      room.current >= room.min &&
+      room.current <= room.max
+    ) {
       return "Normal";
     }
+
     return "Warning";
   };
 
   return (
     <div className="temperature-page">
-      <h1>Temperature Monitoring</h1>
-      <p>Monitor cold storage temperature levels</p>
 
+      {/* Header */}
+      <div className="temperature-header">
+        <h1>Temperature Monitoring</h1>
+        <p>
+          Monitor and control cold storage temperature levels.
+        </p>
+      </div>
+
+      {/* Temperature Cards */}
       <div className="temperature-cards">
+
         {temperatures.map((room) => (
-          <div className="temperature-card" key={room.id}>
+
+          <div
+            className="temperature-card"
+            key={room.id}
+          >
+
+            <div className="temperature-icon">
+              🌡️
+            </div>
+
             <h3>{room.name}</h3>
 
             <h2>{room.current}°C</h2>
 
-            <p
+            <p className="safe-range">
+              Safe Range: {room.min}°C to {room.max}°C
+            </p>
+
+            <span
               className={
                 getStatus(room) === "Normal"
                   ? "normal"
@@ -63,27 +93,44 @@ function Temperature() {
               }
             >
               {getStatus(room)}
-            </p>
+            </span>
 
-            <input
-              type="number"
-              value={room.current}
-              onChange={(e) =>
-                updateTemperature(room.id, e.target.value)
-              }
-            />
+            <div className="temperature-control">
+
+              <label>
+                Update Temperature
+              </label>
+
+              <input
+                type="number"
+                value={room.current}
+                onChange={(e) =>
+                  updateTemperature(
+                    room.id,
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
           </div>
+
         ))}
+
       </div>
 
+      {/* Temperature Details */}
       <div className="temperature-table">
+
         <h2>Temperature Details</h2>
 
         <table>
+
           <thead>
             <tr>
               <th>Storage Unit</th>
-              <th>Current Temperature</th>
+              <th>Current</th>
               <th>Minimum</th>
               <th>Maximum</th>
               <th>Status</th>
@@ -91,12 +138,23 @@ function Temperature() {
           </thead>
 
           <tbody>
+
             {temperatures.map((room) => (
+
               <tr key={room.id}>
+
                 <td>{room.name}</td>
-                <td>{room.current}°C</td>
+
+                <td>
+                  <strong>
+                    {room.current}°C
+                  </strong>
+                </td>
+
                 <td>{room.min}°C</td>
+
                 <td>{room.max}°C</td>
+
                 <td
                   className={
                     getStatus(room) === "Normal"
@@ -106,11 +164,17 @@ function Temperature() {
                 >
                   {getStatus(room)}
                 </td>
+
               </tr>
+
             ))}
+
           </tbody>
+
         </table>
+
       </div>
+
     </div>
   );
 }

@@ -1,3 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* Sidebar */
+
 .navbar {
   width: 220px;
   height: 100vh;
@@ -8,6 +21,7 @@
   padding: 25px 15px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
+  z-index: 1000;
 }
 
 .navbar h2 {
@@ -47,6 +61,9 @@
   background: #fef2f2;
   color: #dc2626;
 }
+
+/* Mobile */
+
 @media (max-width: 768px) {
   .navbar {
     width: 100%;
@@ -72,23 +89,5 @@
 
   .navbar button:last-child {
     margin-top: 0;
-  }
-
-  .dashboard,
-  .products-page,
-  .temperature-page,
-  .alerts-page,
-  .storage-page,
-  .reports-page {
-    margin-left: 0;
-    padding: 20px;
-  }
-
-  .dashboard-cards,
-  .temperature-cards,
-  .alert-cards,
-  .storage-cards,
-  .report-cards {
-    grid-template-columns: 1fr;
   }
 }

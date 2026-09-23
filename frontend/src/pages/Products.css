@@ -168,3 +168,23 @@
     min-width: 800px;
   }
 }
+.good {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.warning {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+.expired {
+  color: #dc2626;
+  font-weight: bold;
+}
+.no-products {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+  font-weight: bold;
+}
