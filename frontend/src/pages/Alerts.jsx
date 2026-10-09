@@ -1,35 +1,142 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Alerts.css";
 
 function Alerts() {
-  const [alerts, setAlerts] = useState([
-    {
-      id: 1,
-      type: "Temperature",
-      item: "Cold Room B",
-      message: "Temperature is above the safe limit.",
-      status: "Critical",
-      time: "10 minutes ago",
-    },
-    {
-      id: 2,
-      type: "Expiry",
-      item: "Milk",
-      message: "Product is expiring soon.",
-      status: "Warning",
-      time: "30 minutes ago",
-    },
-    {
-      id: 3,
-      type: "Stock",
-      item: "Fresh Apples",
-      message: "Stock level needs monitoring.",
-      status: "Info",
-      time: "1 hour ago",
-    },
-  ]);
+  const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Clear alert
+  // Fetch real data from backend
+  const fetchAlerts = async () => {
+    try {
+      const [productsResponse, temperatureResponse] =
+        await Promise.all([
+          fetch("http://localhost:5000/api/products"),
+          fetch("http://localhost:5000/api/temperature"),
+        ]);
+
+      const productsResult = await productsResponse.json();
+      const temperatureResult =
+        await temperatureResponse.json();
+
+      const generatedAlerts = [];
+
+      // =========================
+      // TEMPERATURE ALERTS
+      // =========================
+
+      if (temperatureResult.success) {
+        const latestRooms = {};
+
+        temperatureResult.data.forEach((item) => {
+          if (!latestRooms[item.cold_room_id]) {
+            latestRooms[item.cold_room_id] = item;
+          }
+        });
+
+        Object.values(latestRooms).forEach((room) => {
+          const temperature = Number(room.temperature);
+
+          if (temperature > 6) {
+            generatedAlerts.push({
+              id: `temp-${room.cold_room_id}`,
+              type: "Temperature",
+              item: room.room_name,
+              message:
+                "Temperature is above the safe limit.",
+              status: "Critical",
+              time: "Recent",
+            });
+          } else if (temperature < 2) {
+            generatedAlerts.push({
+              id: `temp-${room.cold_room_id}`,
+              type: "Temperature",
+              item: room.room_name,
+              message:
+                "Temperature is below the safe limit.",
+              status: "Warning",
+              time: "Recent",
+            });
+          }
+        });
+      }
+
+      // =========================
+      // PRODUCT ALERTS
+      // =========================
+
+      if (productsResult.success) {
+        productsResult.data.forEach((product) => {
+          const expiryDate = new Date(product.expiry_date);
+          const today = new Date();
+
+          const difference =
+            expiryDate.getTime() - today.getTime();
+
+          const daysLeft = Math.ceil(
+            difference / (1000 * 60 * 60 * 24)
+          );
+
+          // Expired product
+          if (daysLeft < 0) {
+            generatedAlerts.push({
+              id: `expiry-${product.id}`,
+              type: "Expiry",
+              item: product.name,
+              message: "Product has expired.",
+              status: "Critical",
+              time: "Expired",
+            });
+          }
+
+          // Expiring within 7 days
+          else if (daysLeft <= 7) {
+            generatedAlerts.push({
+              id: `expiry-${product.id}`,
+              type: "Expiry",
+              item: product.name,
+              message: "Product is expiring soon.",
+              status: "Warning",
+              time: `${daysLeft} day${
+                daysLeft !== 1 ? "s" : ""
+              } left`,
+            });
+          }
+
+          // Stock alert
+          const quantityNumber = parseFloat(
+            product.quantity
+          );
+
+          if (
+            !isNaN(quantityNumber) &&
+            quantityNumber <= 250
+          ) {
+            generatedAlerts.push({
+              id: `stock-${product.id}`,
+              type: "Stock",
+              item: product.name,
+              message:
+                "Stock level needs monitoring.",
+              status: "Info",
+              time: "Recent",
+            });
+          }
+        });
+      }
+
+      setAlerts(generatedAlerts);
+    } catch (error) {
+      console.error("ALERT FETCH ERROR:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAlerts();
+  }, []);
+
+  // Clear single alert
   const clearAlert = (id) => {
     setAlerts(
       alerts.filter((alert) => alert.id !== id)
@@ -63,6 +170,14 @@ function Alerts() {
     (alert) => alert.status === "Info"
   ).length;
 
+  if (loading) {
+    return (
+      <div className="alerts-page">
+        <h2>Loading alerts...</h2>
+      </div>
+    );
+  }
+
   return (
     <div className="alerts-page">
 
@@ -71,7 +186,8 @@ function Alerts() {
         <div>
           <h1>Alerts & Notifications</h1>
           <p>
-            Monitor important cold storage alerts and notifications.
+            Monitor important cold storage alerts and
+            notifications.
           </p>
         </div>
 
@@ -109,29 +225,63 @@ function Alerts() {
       {/* Alert Cards */}
       <div className="alert-cards">
 
-        <div className="alert-card danger">
-          <h3>🚨 Temperature Alert</h3>
-          <p>
-            Cold Room B temperature is above the safe limit.
-          </p>
-          <span>8°C detected</span>
-        </div>
+        {alerts
+          .filter(
+            (alert) => alert.type === "Temperature"
+          )
+          .slice(0, 1)
+          .map((alert) => (
+            <div
+              className="alert-card danger"
+              key={alert.id}
+            >
+              <h3>🚨 Temperature Alert</h3>
+              <p>
+                {alert.item} {alert.message}
+              </p>
+              <span>
+                Temperature requires attention
+              </span>
+            </div>
+          ))}
 
-        <div className="alert-card warning">
-          <h3>⚠️ Expiry Alert</h3>
-          <p>
-            Milk is approaching its expiry date.
-          </p>
-          <span>Expiry: 20-08-2026</span>
-        </div>
+        {alerts
+          .filter(
+            (alert) => alert.type === "Expiry"
+          )
+          .slice(0, 1)
+          .map((alert) => (
+            <div
+              className="alert-card warning"
+              key={alert.id}
+            >
+              <h3>⚠️ Expiry Alert</h3>
+              <p>
+                {alert.item} {alert.message}
+              </p>
+              <span>{alert.time}</span>
+            </div>
+          ))}
 
-        <div className="alert-card info">
-          <h3>📦 Stock Alert</h3>
-          <p>
-            Fresh Apples stock needs monitoring.
-          </p>
-          <span>250 kg available</span>
-        </div>
+        {alerts
+          .filter(
+            (alert) => alert.type === "Stock"
+          )
+          .slice(0, 1)
+          .map((alert) => (
+            <div
+              className="alert-card info"
+              key={alert.id}
+            >
+              <h3>📦 Stock Alert</h3>
+              <p>
+                {alert.item} stock needs monitoring.
+              </p>
+              <span>
+                Check available quantity
+              </span>
+            </div>
+          ))}
 
       </div>
 
@@ -140,6 +290,7 @@ function Alerts() {
 
         <div className="table-header">
           <h2>Recent Alerts</h2>
+
           <span>
             {alerts.length} active alert
             {alerts.length !== 1 ? "s" : ""}
@@ -147,19 +298,18 @@ function Alerts() {
         </div>
 
         {alerts.length === 0 ? (
-
           <div className="no-alerts">
             <div>✅</div>
+
             <h3>No Active Alerts</h3>
+
             <p>
-              All your cold storage alerts have been cleared.
+              All your cold storage alerts have
+              been cleared.
             </p>
           </div>
-
         ) : (
-
           <table>
-
             <thead>
               <tr>
                 <th>Alert Type</th>
@@ -172,9 +322,7 @@ function Alerts() {
             </thead>
 
             <tbody>
-
               {alerts.map((alert) => (
-
                 <tr key={alert.id}>
 
                   <td>{alert.type}</td>
@@ -211,17 +359,12 @@ function Alerts() {
                   </td>
 
                 </tr>
-
               ))}
-
             </tbody>
-
           </table>
-
         )}
 
       </div>
-
     </div>
   );
 }

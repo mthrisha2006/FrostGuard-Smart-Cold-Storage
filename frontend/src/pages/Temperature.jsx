@@ -1,43 +1,84 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Temperature.css";
 
 function Temperature() {
-  const [temperatures, setTemperatures] = useState([
-    {
-      id: 1,
-      name: "Cold Room A",
-      current: 4,
-      min: 2,
-      max: 6,
-    },
-    {
-      id: 2,
-      name: "Cold Room B",
-      current: 8,
-      min: 2,
-      max: 6,
-    },
-    {
-      id: 3,
-      name: "Freezer A",
-      current: -18,
-      min: -25,
-      max: -15,
-    },
-  ]);
+  const [temperatures, setTemperatures] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Update temperature
-  const updateTemperature = (id, value) => {
+  // Get temperature data from backend
+  const fetchTemperatures = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/temperature"
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        const roomData = result.data.map((item) => ({
+          id: item.cold_room_id,
+          name: item.room_name,
+          current: Number(item.temperature),
+          min: 2,
+          max: 6,
+        }));
+
+        setTemperatures(roomData);
+      }
+    } catch (error) {
+      console.error("TEMPERATURE FETCH ERROR:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTemperatures();
+  }, []);
+
+  // Update temperature in backend
+  const updateTemperature = async (id, value) => {
+    const newTemperature = Number(value);
+
+    // Update UI immediately
     setTemperatures(
       temperatures.map((room) =>
         room.id === id
           ? {
               ...room,
-              current: Number(value),
+              current: newTemperature,
             }
           : room
       )
     );
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/temperature",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cold_room_id: id,
+            temperature: newTemperature,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        alert(result.message || "Failed to update temperature");
+        return;
+      }
+
+      console.log("Temperature saved:", result);
+    } catch (error) {
+      console.error("TEMPERATURE UPDATE ERROR:", error);
+      alert("Backend server connection failed");
+    }
   };
 
   // Get temperature status
@@ -51,6 +92,14 @@ function Temperature() {
 
     return "Warning";
   };
+
+  if (loading) {
+    return (
+      <div className="temperature-page">
+        <h2>Loading temperature data...</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="temperature-page">

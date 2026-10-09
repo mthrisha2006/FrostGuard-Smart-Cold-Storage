@@ -5,23 +5,19 @@
   min-height: 100vh;
   box-sizing: border-box;
 }
-
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 }
-
 .dashboard-header h1 {
   color: #1e293b;
   margin-bottom: 8px;
 }
-
 .dashboard-header p {
   color: #64748b;
 }
-
 .dashboard-report-btn {
   border: none;
   background: #2563eb;
@@ -31,73 +27,58 @@
   cursor: pointer;
   font-weight: 600;
 }
-
 .dashboard-report-btn:hover {
   background: #1d4ed8;
 }
-
 /* Cards */
-
 .dashboard-cards {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 18px;
   margin-bottom: 30px;
 }
-
 .card {
   background: white;
   padding: 22px;
   border-radius: 14px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
-
 .card-icon {
   font-size: 28px;
   margin-bottom: 12px;
 }
-
 .card h3 {
   color: #475569;
   font-size: 15px;
   margin-bottom: 8px;
 }
-
 .card h2 {
   color: #1e293b;
   font-size: 30px;
   margin: 5px 0;
 }
-
 .card p {
   color: #64748b;
   font-size: 13px;
 }
-
 .good-number {
   color: #16a34a !important;
 }
-
 .warning-number {
   color: #f59e0b !important;
 }
-
 .expired-number {
   color: #dc2626 !important;
 }
-
 .clickable-card {
   cursor: pointer;
   transition: 0.2s;
 }
-
 .clickable-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
-
 /* Quick Actions */
-
 .quick-actions {
   background: white;
   padding: 25px;
@@ -105,18 +86,15 @@
   border-radius: 14px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
-
 .quick-actions h2 {
   color: #1e293b;
   margin-bottom: 20px;
 }
-
 .action-buttons {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
-
 .action-buttons button {
   border: none;
   background: #2563eb;
@@ -126,13 +104,10 @@
   cursor: pointer;
   font-weight: 600;
 }
-
 .action-buttons button:hover {
   background: #1d4ed8;
 }
-
 /* Recent Products */
-
 .recent-products {
   background: white;
   padding: 25px;
@@ -140,24 +115,20 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   margin-bottom: 25px;
 }
-
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-
 .section-header h2 {
   color: #1e293b;
   margin-bottom: 5px;
 }
-
 .section-header p {
   color: #64748b;
   font-size: 14px;
 }
-
 .view-all-btn {
   border: none;
   background: #eff6ff;
@@ -167,74 +138,58 @@
   cursor: pointer;
   font-weight: 600;
 }
-
 .view-all-btn:hover {
   background: #dbeafe;
 }
-
 /* Table */
-
 .dashboard-table {
   overflow-x: auto;
 }
-
 .dashboard-table table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .dashboard-table th,
 .dashboard-table td {
   padding: 14px;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
-
 .dashboard-table th {
   background: #f8fafc;
   color: #475569;
 }
-
 .dashboard-table td {
   color: #334155;
 }
-
 .status-good {
   color: #16a34a;
   font-weight: bold;
 }
-
 .status-warning {
   color: #f59e0b;
   font-weight: bold;
 }
-
 .status-expired {
   color: #dc2626;
   font-weight: bold;
 }
-
 /* Empty State */
-
 .empty-dashboard {
   text-align: center;
   padding: 45px 20px;
 }
-
 .empty-dashboard div {
   font-size: 45px;
 }
-
 .empty-dashboard h3 {
   color: #334155;
   margin: 10px 0;
 }
-
 .empty-dashboard p {
   color: #64748b;
   margin-bottom: 18px;
 }
-
 .empty-dashboard button {
   border: none;
   background: #2563eb;
@@ -243,75 +198,60 @@
   border-radius: 8px;
   cursor: pointer;
 }
-
 /* System Overview */
-
 .system-overview {
   background: white;
   padding: 25px;
   border-radius: 14px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
-
 .system-overview h2 {
   color: #1e293b;
   margin-bottom: 20px;
 }
-
 .overview-items {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
 }
-
 .overview-item {
   background: #f8fafc;
   padding: 16px;
   border-radius: 10px;
 }
-
 .overview-item span {
   display: block;
   color: #64748b;
   font-size: 14px;
   margin-bottom: 8px;
 }
-
 .online {
   color: #16a34a;
 }
-
 /* Responsive */
-
 @media (max-width: 1200px) {
   .dashboard-cards {
     grid-template-columns: repeat(3, 1fr);
   }
-
   .overview-items {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 768px) {
   .dashboard {
     margin-left: 0;
     padding: 20px;
   }
-
   .dashboard-header {
     align-items: flex-start;
     gap: 15px;
   }
-
   .dashboard-cards {
     grid-template-columns: 1fr;
   }
-
   .overview-items {
     grid-template-columns: 1fr;
   }
-
   .section-header {
     align-items: flex-start;
     gap: 15px;

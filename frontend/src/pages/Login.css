@@ -3,9 +3,7 @@
   display: flex;
   background: #f8fafc;
 }
-
 /* Left Side */
-
 .login-left {
   width: 50%;
   background: linear-gradient(135deg, #2563eb, #1e40af);
@@ -16,33 +14,27 @@
   padding: 60px;
   box-sizing: border-box;
 }
-
 .login-left h1 {
   font-size: 42px;
   margin-bottom: 10px;
 }
-
 .login-left p {
   font-size: 18px;
   margin: 5px 0;
 }
-
 .features {
   margin-top: 40px;
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
-
 .features div {
   background: rgba(255, 255, 255, 0.12);
   padding: 15px 18px;
   border-radius: 10px;
   font-size: 16px;
 }
-
 /* Login Box */
-
 .login-box {
   width: 50%;
   max-width: 500px;
@@ -50,18 +42,15 @@
   padding: 45px;
   box-sizing: border-box;
 }
-
 .login-box h2 {
   color: #1e293b;
   font-size: 30px;
   margin-bottom: 8px;
 }
-
 .login-box > p {
   color: #64748b;
   margin-bottom: 30px;
 }
-
 .login-box label {
   display: block;
   color: #334155;
@@ -69,7 +58,6 @@
   margin-bottom: 8px;
   margin-top: 18px;
 }
-
 .login-box input {
   width: 100%;
   padding: 13px;
@@ -79,12 +67,10 @@
   font-size: 14px;
   outline: none;
 }
-
 .login-box input:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px #dbeafe;
 }
-
 .login-box button {
   width: 100%;
   border: none;
@@ -97,32 +83,25 @@
   font-weight: 600;
   cursor: pointer;
 }
-
 .login-box button:hover {
   background: #1d4ed8;
 }
-
 /* Mobile */
-
 @media (max-width: 768px) {
   .login-page {
     flex-direction: column;
   }
-
   .login-left {
     width: 100%;
     padding: 35px 25px;
     text-align: center;
   }
-
   .login-left h1 {
     font-size: 32px;
   }
-
   .features {
     margin-top: 25px;
   }
-
   .login-box {
     width: 100%;
     padding: 35px 25px;

@@ -1,51 +1,98 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Storage.css";
 
 function Storage() {
-  const [storageUnits, setStorageUnits] = useState([
-    {
-      id: 1,
-      name: "Cold Room A",
-      type: "Cold Storage",
-      capacity: 1000,
-      used: 750,
-    },
-    {
-      id: 2,
-      name: "Cold Room B",
-      type: "Cold Storage",
-      capacity: 1000,
-      used: 900,
-    },
-    {
-      id: 3,
-      name: "Freezer A",
-      type: "Freezer",
-      capacity: 800,
-      used: 480,
-    },
-  ]);
+  const [storageUnits, setStorageUnits] = useState([]);
+const [loading, setLoading] = useState(true);
 
+useEffect(() => {
+  fetch("http://localhost:5000/api/storage")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch storage");
+      }
+      return response.json();
+    })
+    .then((result) => {
+      if (!result.success) {
+        throw new Error("Storage data loading failed");
+      }
+
+      setStorageUnits(
+        result.data.map((item) => ({
+          id: item.id,
+          name: item.room_name,
+          type: item.room_name.toLowerCase().includes("freezer")
+            ? "Freezer"
+            : "Cold Storage",
+          capacity: Number(item.capacity),
+          used: Number(item.used_capacity),
+        }))
+      );
+    })
+    .catch((error) => console.error(error))
+    .finally(() => setLoading(false));
+}, []);
+    if (loading) {
+  return (
+    <div className="storage-page">
+      <h2>Loading storage data...</h2>
+    </div>
+  );
+}
   // Update used capacity
-  const updateUsed = (id, value) => {
-    let newValue = Number(value);
+  
+const updateUsed = (id, value) => {
+  let newValue = Number(value);
 
-    if (newValue < 0) {
-      newValue = 0;
-    }
+  const unit = storageUnits.find((item) => item.id === id);
 
-    setStorageUnits(
-      storageUnits.map((unit) =>
-        unit.id === id
-          ? {
-              ...unit,
-              used: newValue,
-            }
-          : unit
-      )
-    );
-  };
+  if (!unit) return;
 
+  if (value === "" || !Number.isFinite(newValue)) {
+    return;
+  }
+
+  if (newValue < 0) {
+    newValue = 0;
+  }
+
+  if (newValue > unit.capacity) {
+    alert(`Maximum capacity is ${unit.capacity} kg`);
+    return;
+  }
+
+  setStorageUnits((previousUnits) =>
+    previousUnits.map((item) =>
+      item.id === id
+        ? { ...item, used: newValue }
+        : item
+    )
+  );
+
+  fetch(`http://localhost:5000/api/storage/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      used_capacity: newValue,
+    }),
+  })
+    .then(async (response) => {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to save capacity");
+      }
+
+      console.log("Storage capacity saved successfully");
+    })
+    .catch((error) => {
+      console.error("STORAGE UPDATE ERROR:", error);
+      alert("Database-la save aagala. Page refresh panni check pannunga.");
+    });
+};
   // Calculate percentage
   const getPercentage = (unit) => {
     if (unit.capacity === 0) {
