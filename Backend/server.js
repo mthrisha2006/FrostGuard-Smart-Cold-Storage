@@ -10,7 +10,7 @@ console.log("DB NAME:", process.env.DB_NAME);
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2/promise");
-
+const bcrypt = require("bcryptjs");
 const app = express();
 
 app.use(cors());
@@ -258,6 +258,136 @@ app.delete("/api/products/:id", async (req, res) => {
       success: false,
       message: "Failed to delete product",
       error: error.message,
+    });
+  }
+});
+// ==========================================
+// USER REGISTER
+// ==========================================
+
+app.post("/api/register", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const cleanName = name.trim();
+    const cleanEmail = email.trim().toLowerCase();
+
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(cleanEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid Gmail address",
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must contain at least 6 characters",
+      });
+    }
+
+    const [existingUsers] = await pool.query(
+      "SELECT id FROM users WHERE email = ?",
+      [cleanEmail]
+    );
+
+    if (existingUsers.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: "This Gmail is already registered. Please login.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+      [cleanName, cleanEmail, hashedPassword]
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Registration successful. Please login.",
+    });
+  } catch (error) {
+    console.error("REGISTER ERROR:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Registration failed",
+    });
+  }
+});
+// ==========================================
+// USER LOGIN
+// ==========================================
+
+app.post("/api/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(cleanEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid Gmail address",
+      });
+    }
+
+    const [users] = await pool.query(
+      "SELECT id, name, email, password FROM users WHERE email = ?",
+      [cleanEmail]
+    );
+
+    if (users.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "Gmail is not registered. Please register first.",
+      });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      users[0].password
+    );
+
+    if (!isPasswordCorrect) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: users[0].id,
+        name: users[0].name,
+        email: users[0].email,
+      },
+    });
+  } catch (error) {
+    console.error("LOGIN ERROR:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Login failed",
     });
   }
 });
